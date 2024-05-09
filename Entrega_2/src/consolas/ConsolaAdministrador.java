@@ -11,6 +11,7 @@ import subasta.Oferta;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
@@ -18,11 +19,13 @@ import java.util.HashSet;
 public class ConsolaAdministrador extends ConsolaBasica {
     private Administrador administrador;
     private InventarioGeneral inventario;
-    private UsuariosRegistrados usuariosRegistrados;
+    private UsuariosRegistrados users;
+    private File archivo;
 
-    public ConsolaAdministrador(InventarioGeneral inventario) {
+    public ConsolaAdministrador(InventarioGeneral inventario,UsuariosRegistrados users, File archivo) {
         this.inventario = inventario;
-        this.usuariosRegistrados = usuariosRegistrados;
+        this.users=users;
+        this.archivo = archivo;
     }
     
     protected void mostrarMenuPrincipal() throws IOException {
@@ -30,7 +33,7 @@ public class ConsolaAdministrador extends ConsolaBasica {
         mostrarOpcionesAdministrativas();
     }
 
-    private void mostrarOpcionesAdministrativas() {
+    private void mostrarOpcionesAdministrativas() throws IOException {
         boolean continuar = true;
         while (continuar) {
             System.out.println("\nOpciones Administrativas:");
@@ -73,12 +76,12 @@ public class ConsolaAdministrador extends ConsolaBasica {
         }
     }
 
-    private void agregarPieza() {
+    private void agregarPieza() throws IOException {
     	String piezaID = "";
     	Pieza pieza = null;
         String idComprador = pedirCadenaAlUsuario("Ingrese el ID del comprador");
-        for(int i=0; i<usuariosRegistrados.getCompradoresEnPrograma().size();i++) {
-        	CompradorPropietario comprador = usuariosRegistrados.getCompradoresEnPrograma().get(i);
+        for(int i=0; i<users.getCompradoresEnPrograma().size();i++) {
+        	CompradorPropietario comprador = users.getCompradoresEnPrograma().get(i);
         	if(comprador.getIdUsuario().equals(idComprador)){
         		piezaID = pedirCadenaAlUsuario("Ingresar el ID de la pieza que ingresará");
         		String descripcion = comprador.getPieza(i).getDescripcion();
@@ -112,6 +115,8 @@ public class ConsolaAdministrador extends ConsolaBasica {
         }
         
 		System.out.println("Pieza con ID " + piezaID + " agregada exitosamente al inventario.");
+		users.guardarUsuarios(archivo);
+    
     }
 
     private void devolverPieza() {
@@ -189,7 +194,7 @@ public class ConsolaAdministrador extends ConsolaBasica {
 
     
     private CompradorPropietario buscarCompradorPorId(String id) {
-        for (CompradorPropietario comprador : usuariosRegistrados.getCompradoresEnPrograma()) {
+        for (CompradorPropietario comprador : users.getCompradoresEnPrograma()) {
             if (comprador.getIdUsuario().equals(id)) {
                 return comprador;
             }

@@ -133,7 +133,7 @@ public class ConsolaPrincipal extends ConsolaBasica {
         switch (tipoUsuario) {
         
             case "Administrador":
-                ConsolaAdministrador consolaAdministrador = new ConsolaAdministrador(inventario);
+                ConsolaAdministrador consolaAdministrador = new ConsolaAdministrador(inventario, usuariosDelPrograma, archivo);
                 consolaAdministrador.mostrarMenuPrincipal();
                 break;
             case "Operador":
@@ -167,7 +167,7 @@ public class ConsolaPrincipal extends ConsolaBasica {
 			
 			File archivo = new File( "./datos/" + "Usuarios" );
             tipoUsuario = "Administrador";
-            ConsolaAdministrador cadmi = new ConsolaAdministrador(inventario);
+            ConsolaAdministrador cadmi = new ConsolaAdministrador(inventario, usuariosDelPrograma, archivo);
             cadmi.crearUsuario(usuariosDelPrograma);
             usuariosDelPrograma.guardarUsuarios(archivo);
             
