@@ -144,7 +144,7 @@ public class InventarioGeneral {
     		for (Map.Entry<String, Pieza> entry : inventarioExhibido.entrySet()) {
     			String idPieza = entry.getKey();
     		    Pieza pieza = entry.getValue();
-    		    SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    		    SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
                 String titulo = pieza.getTitulo();
                 int anioCreacion = pieza.getAnioCreacion();
                 String lugarCreacion = pieza.getLugarCreacion();
@@ -205,7 +205,7 @@ public class InventarioGeneral {
     		for (Map.Entry<String, Pieza> entry : inventarioBodega.entrySet()) {
     			String idPieza = entry.getKey();
     		    Pieza pieza = entry.getValue();
-    		    SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    		    SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
                 String titulo = pieza.getTitulo();
                 int anioCreacion = pieza.getAnioCreacion();
                 String lugarCreacion = pieza.getLugarCreacion();
@@ -265,8 +265,8 @@ public class InventarioGeneral {
     		for (Map.Entry<String, Pieza> entry : inventarioPasado.entrySet()) {
     			String idPieza = entry.getKey();
     		    Pieza pieza = entry.getValue();
-    		    SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String titulo = pieza.getTitulo();
+    		    SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+    		    String titulo = pieza.getTitulo();
                 int anioCreacion = pieza.getAnioCreacion();
                 String lugarCreacion = pieza.getLugarCreacion();
                 String estadoPieza = pieza.getEstadoPieza();
@@ -327,7 +327,8 @@ public class InventarioGeneral {
     		
     		writer.close( );}
 	    
- public static InventarioGeneral cargarEstado( File archivo ) throws FileNotFoundException, IOException, NumberFormatException, ParseException
+ @SuppressWarnings("deprecation")
+public static InventarioGeneral cargarEstado( File archivo ) throws FileNotFoundException, IOException, NumberFormatException, ParseException
 	    {
 	 Map<String, Pieza> inventarioBodega = new HashMap<>();
 	 Map<String, Pieza> inventarioPasado = new HashMap<>();
@@ -339,10 +340,17 @@ public class InventarioGeneral {
 	        while( line != null )
 	        {
 	            String[] partes = line.split( ":" );
-	            if( partes[ 0 ].equals( "Exhibido" ) )
-		            {SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	            	Date fecha = formato.parse(partes[12]);
-	            	String idPieza = partes[2];
+	            if( partes[ 0 ].equals( "Exhibido" ) && !partes[ 1 ].equals("Autor"))
+		            {String dateInString = partes[12];
+ 	                Date fecha = new Date();
+ 	                String[] fechita = dateInString.split( "-" );
+ 	                int year = Integer.parseInt(fechita[0]);
+ 	                int month = Integer.parseInt(fechita[1]);
+ 	                int day = Integer.parseInt(fechita[2]);
+ 	                fecha.setYear(year);
+ 	                fecha.setMonth(month-1);
+ 	                fecha.setDate(day);
+ 	                String idPieza = partes[2];
 	                String titulo =  partes[3];
 	                int anioCreacion = Integer.parseInt(partes[4]);
 	                String lugarCreacion = partes[5];
@@ -394,10 +402,16 @@ public class InventarioGeneral {
 		            }
 	            	
 	            }
-	            else if( partes[ 0 ].equals( "Bodega" ) )
-	            {SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            	Date fecha = formato.parse(partes[12]);
-            	String idPieza = partes[2];
+	            else if( partes[ 0 ].equals( "Bodega" )&& !partes[ 1 ].equals("Autor") )
+	            {String dateInString = partes[12];
+	                Date fecha = new Date();
+	                String[] fechita = dateInString.split( "-" );
+	                int year = Integer.parseInt(fechita[0]);
+	                int month = Integer.parseInt(fechita[1]);
+	                int day = Integer.parseInt(fechita[2]);
+	                fecha.setYear(year);
+	                fecha.setMonth(month-1);
+	                fecha.setDate(day);String idPieza = partes[2];
                 String titulo =  partes[3];
                 int anioCreacion = Integer.parseInt(partes[4]);
                 String lugarCreacion = partes[5];
@@ -449,10 +463,17 @@ public class InventarioGeneral {
 	            
 	            	
 	            }}
-	            else if( partes[ 0 ].equals( "Pasado" ) )
+	            else if( partes[ 0 ].equals( "Pasado" )&& !partes[ 1 ].equals("Autor") )
 	            {
-	            	SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	            	Date fecha = formato.parse(partes[12]);
+	            	String dateInString = partes[12];
+ 	                Date fecha = new Date();
+ 	                String[] fechita = dateInString.split( "-" );
+ 	                int year = Integer.parseInt(fechita[0]);
+ 	                int month = Integer.parseInt(fechita[1]);
+ 	                int day = Integer.parseInt(fechita[2]);
+ 	                fecha.setYear(year);
+ 	                fecha.setMonth(month-1);
+ 	                fecha.setDate(day);
 	            	String idPieza = partes[2];
 	                String titulo =  partes[3];
 	                int anioCreacion = Integer.parseInt(partes[4]);
@@ -509,6 +530,39 @@ public class InventarioGeneral {
 	            else if( partes[ 0 ].equals( "Dinero" ) )
 	            {
 	            	inventarioDinero = Double.parseDouble(partes[1]);
+	            	
+	            }
+	            
+	            else if (partes[ 0 ].equals( "Pasado" )&& partes[ 1 ].equals("Autor") ) {
+	            	String idPieza = partes[2];
+	            	String autor = partes[3];
+	            	for(int m=0; m<inventarioPasado.size();m++) {
+	                	Pieza pieza = inventarioPasado.get(idPieza);
+	                	pieza.setAutores(autor);
+	                	}
+	            	
+	            	
+	            }
+	            
+	            else if (partes[ 0 ].equals( "Bodega" )&& partes[ 1 ].equals("Autor") ) {
+	            	String idPieza = partes[2];
+	            	String autor = partes[3];
+	            	for(int m=0; m<inventarioBodega.size();m++) {
+	                	Pieza pieza = inventarioBodega.get(idPieza);
+	                	pieza.setAutores(autor);
+	                	}
+	            	
+	            	
+	            }
+	            
+	            else if (partes[ 0 ].equals( "Exhibido" )&& partes[ 1 ].equals("Autor") ) {
+	            	String idPieza = partes[2];
+	            	String autor = partes[3];
+	            	for(int m=0; m<inventarioExhibido.size();m++) {
+	                	Pieza pieza = inventarioExhibido.get(idPieza);
+	                	pieza.setAutores(autor);
+	                	}
+	            	
 	            	
 	            }
 	        

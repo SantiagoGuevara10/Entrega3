@@ -10,6 +10,7 @@ import galeria.inventarios.PiezaVideo;
 import subasta.Oferta;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.io.File;
 import java.io.IOException;
@@ -87,18 +88,25 @@ public class ConsolaAdministrador extends ConsolaBasica {
         	if(comprador.getIdUsuario().equals(idComprador)){
         		piezaID = pedirCadenaAlUsuario("Ingresar el ID de la pieza que ingresará");
         		String descripcion = comprador.getPieza(i).getDescripcion();
-        		if(descripcion.equals("Escultura")) {
-                	pieza = (PiezaEscultura) comprador.getPieza(i);
+        		List<Pieza> piezas = comprador.getPiezas();
+        		for(int j=0; j<piezas.size();j++) {
+        			if(piezas.get(j).getIdPieza().equals(piezaID)) {
+        				if(descripcion.equals("Escultura")) {
+                        	pieza = (PiezaEscultura) piezas.get(j);
+                		}
+                		else if (descripcion.equals("Fotografia")) {
+                        	pieza = (PiezaFotografia) piezas.get(j);
+                		}
+                		else if (descripcion.equals("Pintura")) {
+                        	pieza = (PiezaPintura)piezas.get(j);
+                		}
+                		else if (descripcion.equals("Video")) {
+                         	pieza = (PiezaVideo)piezas.get(j);
+                		}
+        				
+        			}
         		}
-        		else if (descripcion.equals("Fotografia")) {
-                	pieza = (PiezaFotografia) comprador.getPieza(i);
-        		}
-        		else if (descripcion.equals("Pintura")) {
-                	pieza = (PiezaPintura)comprador.getPieza(i);
-        		}
-        		else if (descripcion.equals("Video")) {
-                 	pieza = (PiezaVideo)comprador.getPieza(i);
-        		}
+        		
                 	
                 	
 		        		int valor = pedirEnteroAlUsuario("Indique en donde va a colocar: 1.Bodega 2. Exhibicion");
@@ -123,10 +131,32 @@ public class ConsolaAdministrador extends ConsolaBasica {
     }
 
     private void devolverPieza() throws IOException {
-        String idPieza = pedirCadenaAlUsuario("Ingrese el ID de la pieza:");
-        Pieza pieza = inventario.getPiezaInventarioBodega(idPieza);
-        if (pieza == null) pieza = inventario.getPiezaInventarioExhibido(idPieza);
-        if (pieza == null) pieza = inventario.getPiezaInventarioPasado(idPieza);
+        String idPieza = pedirCadenaAlUsuario("Ingrese el ID de la pieza");
+        String idUsuario = pedirCadenaAlUsuario("Ingrese el ID de la persona a la cual se le devuelve la pieza");
+        Pieza pieza = null;
+        for (Entry<String, Pieza> entry : inventario.getInventarioBodega().entrySet()) {
+            String key = entry.getKey();
+            Pieza value = entry.getValue();
+            if(key.equals(idPieza)) {
+            	pieza = value;
+            	inventario.getInventarioBodega().remove(key);
+            }}
+        for (Entry<String, Pieza> entry : inventario.getInventarioExhibido().entrySet()) {
+            String key = entry.getKey();
+            Pieza value = entry.getValue();
+            if(key.equals(idPieza)) {
+            	pieza = value;
+            	inventario.getInventarioExhibido().remove(key);
+            	
+            }}
+        for(int i=0; i< users.getCompradoresEnPrograma().size();i++) {
+        	CompradorPropietario comprador = users.getCompradoresEnPrograma().get(i);
+        	if(comprador.getIdUsuario().equals(idUsuario)) {
+        		comprador.agregarPieza(pieza);
+        	}
+        }
+        
+        
         System.out.println("Pieza devuelta y actualizada en el inventario.");
         users.guardarUsuarios(archivo);
 		inventario.guardarUsuarios(archivo2);

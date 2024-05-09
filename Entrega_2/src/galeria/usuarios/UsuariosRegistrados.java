@@ -615,7 +615,7 @@ public static UsuariosRegistrados cargarEstado( File archivo ) throws FileNotFou
                 	
  	                	}}}
                  else if(partes[0].equals("VideoFav")) {
-                	 String dateInString = partes[12];
+                	String dateInString = partes[12];
  	                Date fecha = new Date();
  	                String[] fechita = dateInString.split( "-" );
  	                int year = Integer.parseInt(fechita[0]);
