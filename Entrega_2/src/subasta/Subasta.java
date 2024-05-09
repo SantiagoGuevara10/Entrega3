@@ -13,17 +13,21 @@ public class Subasta {
 	private Map<String, Pieza> piezasDisponibles;
 	private Map<String, List<Oferta>> ofertas;
 	private List<CompradorPropietario> compradores;
+	private boolean activa;
+    private String id;
 	
-	public Subasta(List<Pieza> piezas) {
-		this.piezasDisponibles = new HashMap<String, Pieza>();
-		this.ofertas = new HashMap<String, List<Oferta>>();
-		for (int i = 0; i < piezas.size(); i++) {
-			Pieza pieza = piezas.get(i);
-			String id = pieza.getIdPieza();
-			this.piezasDisponibles.put(id, pieza);
-			this.ofertas.put(id, new LinkedList<Oferta>());
-		}
-	}
+    public Subasta(String id, List<Pieza> piezas) {
+        this.id = id;
+        this.piezasDisponibles = new HashMap<>();
+        this.ofertas = new HashMap<>();
+        this.compradores = new LinkedList<>();
+        for (Pieza pieza : piezas) {
+            String piezaId = pieza.getIdPieza();
+            this.piezasDisponibles.put(piezaId, pieza);
+            this.ofertas.put(piezaId, new LinkedList<>());
+        }
+        this.activa = false;
+    }
 	
 	public void crearOferta(CompradorPropietario comprador, String piezaId, int dinero) {
 		Pieza pieza = this.piezasDisponibles.get(piezaId);
@@ -68,4 +72,20 @@ public class Subasta {
 	public void setCompradores(List<CompradorPropietario> compradores) {
 		this.compradores = compradores;
 	}
+	public boolean isActiva() {
+        return activa;
+    }
+
+    public void setActiva(boolean activa) {
+        this.activa = activa;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+	
 }
