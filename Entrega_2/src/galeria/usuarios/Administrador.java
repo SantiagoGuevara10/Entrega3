@@ -72,10 +72,23 @@ public class Administrador extends Empleado {
         }
         return totalValor;
     }
+    public void activarSubasta(Subasta subasta, InventarioGeneral inventario) {
+        if (!inventario.getSubastasEnProceso().contains(subasta)) {
+            subasta.setActiva(true);
+            inventario.addSubasta(subasta);
+            System.out.println("Subasta activada: " + subasta.getId());
+        } else {
+            System.out.println("La subasta ya está activa.");
+        }
+    }
 
-	
-
-	
-	
-		
-	}
+    public void desactivarSubasta(Subasta subasta, InventarioGeneral inventario) {
+        if (inventario.getSubastasEnProceso().contains(subasta)) {
+            subasta.setActiva(false);
+            inventario.removeSubasta(subasta);
+            System.out.println("Subasta desactivada: " + subasta.getId());
+        } else {
+            System.out.println("La subasta no está activa.");
+        }
+    }
+}

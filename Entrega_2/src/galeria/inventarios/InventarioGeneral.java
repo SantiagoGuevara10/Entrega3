@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import galeria.pieza.Pieza;
+import subasta.Subasta;
 import galeria.usuarios.CompradorPropietario;
 import galeria.usuarios.Empleado;
 import galeria.usuarios.UsuariosRegistrados;
@@ -25,13 +26,15 @@ public class InventarioGeneral {
     private Map<String, Pieza> inventarioBodega;
     private Map<String, Pieza> inventarioExhibido;
     private double inventarioDinero;
+    private List<Subasta> subastasEnProceso;
 
     
     public InventarioGeneral() {
         inventarioBodega = new HashMap<>();
         inventarioPasado = new HashMap<>();
         inventarioExhibido = new HashMap<>();
-        inventarioDinero = 0; 
+        inventarioDinero = 0;
+        subastasEnProceso = new LinkedList<>();
     }
 	
 	
@@ -114,6 +117,17 @@ public class InventarioGeneral {
 	public void setInventarioDinero(double inventarioDinero) {
 		this.inventarioDinero = inventarioDinero;
 	}
+	public List<Subasta> getSubastasEnProceso() {
+        return subastasEnProceso;
+    }
+
+    public void addSubasta(Subasta subasta) {
+        this.subastasEnProceso.add(subasta);
+    }
+
+    public void removeSubasta(Subasta subasta) {
+        this.subastasEnProceso.remove(subasta);
+    }
 	public Map<String, Pieza> getPiezasDisponibles() {
 	    Map<String, Pieza> piezasDisponibles = new HashMap<>();
 	    piezasDisponibles.putAll(inventarioBodega);  
