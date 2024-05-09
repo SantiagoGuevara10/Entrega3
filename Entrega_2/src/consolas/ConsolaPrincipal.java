@@ -78,6 +78,9 @@ public class ConsolaPrincipal extends ConsolaBasica {
 
         switch (tipo) {
             case 1:
+            	ConsolaAdministrador coadmin= new ConsolaAdministrador(inventario, usuariosDelPrograma, archivo, archivo2);
+            	coadmin.autenticarUsuario("Administrador", reader);
+            	coadmin.mostrarMenuPrincipal();
                 autenticarUsuario("Administrador", reader);
                 break;
             case 2:

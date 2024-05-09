@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -162,12 +163,14 @@ public class ConsolaAdministrador extends ConsolaBasica {
 		inventario.guardarUsuarios(archivo2);
     }
 
-    private void verificarUsuario() {
+    private void verificarUsuario() throws IOException {
         String idUsuario = pedirCadenaAlUsuario("Ingrese el ID del usuario a verificar:");
         
         CompradorPropietario usuario = buscarCompradorPorId(idUsuario); 
         administrador.verificarUsuario(usuario);
         System.out.println("Usuario verificado correctamente.");
+        users.guardarUsuarios(archivo);
+		inventario.guardarUsuarios(archivo2);
     }
 
     private void registrarOferta() {
@@ -237,4 +240,46 @@ public class ConsolaAdministrador extends ConsolaBasica {
         System.out.println("Comprador no encontrado.");
         return null;
     }
+    
+    public void autenticarUsuario(String tipoUsuario, BufferedReader reader) throws IOException {
+        System.out.print("Ingrese su nombre de usuario: ");
+        String username = reader.readLine();
+        System.out.print("Ingrese su contraseña: ");
+        String password = reader.readLine();
+
+        boolean autenticado = false;
+
+        
+        for (Empleado empleado : users.getUsuariosEnPrograma()) {
+            if (empleado.getUsername().equals(username) && empleado.getPasswordHash().equals(password) && empleado.getRole().equals(tipoUsuario)) {
+                autenticado = true;
+                administrador = (Administrador) empleado;
+                break;
+            }
+        }
+
+        
+        if (!autenticado && tipoUsuario.equals("CompradorPropietario")) {
+            for (CompradorPropietario comprador : users.getCompradoresEnPrograma()) {
+                if (comprador.getUsername().equals(username) && comprador.getPasswordHash().equals(password)) {
+                    autenticado = true;
+                    
+                    break;
+                }
+            }
+        }
+
+        if (autenticado) {
+            System.out.println("Autenticación exitosa. Bienvenido " + tipoUsuario + ".");
+            
+        } else {
+            System.out.println("Credenciales incorrectas o rol incorrecto.");
+        }
+    
+
+
+}
+    
+    
+    
 }
