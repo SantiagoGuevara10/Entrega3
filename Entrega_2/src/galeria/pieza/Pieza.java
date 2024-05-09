@@ -134,9 +134,5 @@ public class Pieza {
     public void setPropietario(CompradorPropietario nuevoPropietario) {
     	this.historialPropietarios.add(nuevoPropietario);
     }
-    public void setVenta(Oferta oferta) {
-    	CompradorPropietario nuevoPropietario = oferta.getComprador();
-    	this.historialVentas.add(oferta);
-    	this.setPropietario(nuevoPropietario);
-    }
+    
 }

@@ -7,12 +7,12 @@ import galeria.usuarios.CompradorPropietario;
 
 public class Oferta {
 	private int dinero;
-	private CompradorPropietario comprador;
-	private Pieza pieza;
+	private String idComprador;
+	private String idPieza;
 	
-	public Oferta(CompradorPropietario comprador, Pieza pieza, int dinero) {
-		this.comprador = comprador;
-		this.pieza = pieza;
+	public Oferta(String idComprador, String idPieza, int dinero) {
+		this.idComprador = idComprador;
+		this.idPieza = idPieza;
 		this.dinero = dinero;
 	}
 	
@@ -22,17 +22,17 @@ public class Oferta {
 	public void setDinero(int dinero) {
 		this.dinero = dinero;
 	}
-	public CompradorPropietario getComprador() {
-		return comprador;
+	public String getidComprador() {
+		return idComprador;
 	}
-	public void setComprador(CompradorPropietario comprador) {
-		this.comprador = comprador;
+	public void setidComprador(String idComprador) {
+		this.idComprador = idComprador;
 	}
-	public Pieza getPieza() {
-		return pieza;
+	public String getidPieza() {
+		return idPieza;
 	}
-	public void setPieza(Pieza pieza) {
-		this.pieza = pieza;
+	public void setidPieza(String idPieza) {
+		this.idPieza = idPieza;
 	}
 	
 }

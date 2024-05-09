@@ -179,7 +179,7 @@ public class ConsolaAdministrador extends ConsolaBasica {
         if (pieza == null) pieza = inventario.getPiezaInventarioExhibido(idPieza);
         CompradorPropietario comprador = buscarCompradorPorId(pedirCadenaAlUsuario("Ingrese el ID del comprador:"));
         int dinero = pedirEnteroAlUsuario("Ingrese el monto de la oferta:");
-        Oferta oferta = new Oferta(comprador, pieza, dinero);
+        Oferta oferta = new Oferta(comprador.getIdUsuario(), idPieza, dinero);
         System.out.println("Oferta registrada exitosamente.");
     }
     private void verHistoriaCompras() {

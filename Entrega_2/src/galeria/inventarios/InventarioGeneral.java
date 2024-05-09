@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import galeria.pieza.Pieza;
+import subasta.Oferta;
 import subasta.Subasta;
 import galeria.usuarios.CompradorPropietario;
 import galeria.usuarios.Empleado;
@@ -111,6 +112,10 @@ public class InventarioGeneral {
 
 	public double getInventarioDinero() {
 		return inventarioDinero;
+	}
+	
+	public void setSubasta(List<Subasta> subasta) {
+		this.subastasEnProceso = subasta;
 	}
 
 
@@ -325,6 +330,32 @@ public class InventarioGeneral {
     		String dineroo = String.valueOf(valor);
     		writer.print("Dinero"+":"+dineroo);
     		
+	        writer.println("Información de las subastas");
+	        
+	        for(int i=0;i< subastasEnProceso.size();i++) {
+	        	List<String> idPiezasDisponibles = subastasEnProceso.get(i).getIdPiezasDisponibles();
+	        	List<Oferta> ofertas = subastasEnProceso.get(i).getOfertas();
+	            String id =  subastasEnProceso.get(i).getId();
+	            
+	            for(int j=0; j<ofertas.size();j++) {
+	            	int dinero = ofertas.get(j).getDinero();
+	            	String dinero1 = String.valueOf(dinero);
+	            	String idComprador = ofertas.get(j).getidComprador();
+	            	String idPieza = ofertas.get(j).getidPieza();
+	            	writer.println("Subasta"+":"+id+":"+"Oferta"+":"+dinero1+":"+idComprador+":"+idPieza);
+	            }
+	            
+	            for(int j=0; j<idPiezasDisponibles.size();j++) {
+	            	String idPieza = idPiezasDisponibles.get(j);
+	            	writer.println("Subasta"+":"+id+":"+"idPieza"+":"+idPieza);
+	            }
+	            
+	            
+	            
+	        	
+	        }
+
+    		
     		writer.close( );}
 	    
  @SuppressWarnings("deprecation")
@@ -334,12 +365,46 @@ public static InventarioGeneral cargarEstado( File archivo ) throws FileNotFound
 	 Map<String, Pieza> inventarioPasado = new HashMap<>();
 	 Map<String, Pieza> inventarioExhibido = new HashMap<>();
 	 double inventarioDinero = 0; 
+	 List<Subasta> subastasEnProceso = new LinkedList<>();
 
 	        BufferedReader br = new BufferedReader( new FileReader( archivo ) );
 	        String line = br.readLine( );
 	        while( line != null )
 	        {
 	            String[] partes = line.split( ":" );
+	            if( partes[ 0 ].equals( "Subasta" ) && partes[ 2 ].equals("Oferta")) {
+	            	String dinero1 = partes[3];
+	            	int dinero = Integer.parseInt(dinero1);
+	            	String id = partes[1];
+	            	String idComprador = partes[4];
+	            	String idPieza = partes[5];
+	            	Oferta oferta = new Oferta(idComprador, idPieza, dinero);
+	            	Subasta subasta = new Subasta(id);
+	            	subasta.getOfertas().add(oferta);
+	            	subastasEnProceso.add(subasta);
+	            	
+	            	
+	            }
+	            if( partes[ 0 ].equals( "Subasta" ) && partes[ 2 ].equals("idPieza")) {
+	            	String idPieza = partes[3];
+	            	String id = partes[1];
+	            	for(int j=0; j<subastasEnProceso.size();j++) {
+	            		Subasta subasta = subastasEnProceso.get(j);
+	            		String idsub = subasta.getId();
+	            		if(idsub.equals(id)) {
+	            			subasta.getIdPiezasDisponibles().add(idPieza);
+	            		}
+	            		
+	            	}
+	            	
+	            	
+	            	
+	            }
+	            	
+	            	
+	            	
+	            	
+	            	
 	            if( partes[ 0 ].equals( "Exhibido" ) && !partes[ 1 ].equals("Autor"))
 		            {String dateInString = partes[12];
  	                Date fecha = new Date();
@@ -565,6 +630,8 @@ public static InventarioGeneral cargarEstado( File archivo ) throws FileNotFound
 	            	
 	            	
 	            }
+	            
+	            
 	        
 	            line = br.readLine( );	
             }        br.close( );  
@@ -574,6 +641,7 @@ public static InventarioGeneral cargarEstado( File archivo ) throws FileNotFound
             total.setInventarioBodega(inventarioBodega);
             total.setInventarioExhibido(inventarioExhibido);
             total.setInventarioPasado(inventarioPasado);
+            total.setSubasta(subastasEnProceso);
             
             return total;
             
