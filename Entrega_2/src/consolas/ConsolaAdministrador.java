@@ -3,6 +3,10 @@ package consolas;
 import galeria.usuarios.*;
 import galeria.pieza.Pieza;
 import galeria.inventarios.InventarioGeneral;
+import galeria.inventarios.PiezaEscultura;
+import galeria.inventarios.PiezaFotografia;
+import galeria.inventarios.PiezaPintura;
+import galeria.inventarios.PiezaVideo;
 import subasta.Oferta;
 import java.util.LinkedList;
 import java.util.List;
@@ -70,20 +74,44 @@ public class ConsolaAdministrador extends ConsolaBasica {
     }
 
     private void agregarPieza() {
+    	String piezaID = "";
+    	Pieza pieza = null;
         String idComprador = pedirCadenaAlUsuario("Ingrese el ID del comprador");
         for(int i=0; i<usuariosRegistrados.getCompradoresEnPrograma().size();i++) {
         	CompradorPropietario comprador = usuariosRegistrados.getCompradoresEnPrograma().get(i);
         	if(comprador.getIdUsuario().equals(idComprador)){
-        		String piezaID = pedirCadenaAlUsuario("Ingresar el ID de la pieza que ingresará");
-        		Pieza pieza = comprador.
+        		piezaID = pedirCadenaAlUsuario("Ingresar el ID de la pieza que ingresará");
+        		String descripcion = comprador.getPieza(i).getDescripcion();
+        		if(descripcion.equals("Escultura")) {
+                	pieza = (PiezaEscultura) comprador.getPieza(i);
+        		}
+        		else if (descripcion.equals("Fotografia")) {
+                	pieza = (PiezaFotografia) comprador.getPieza(i);
+        		}
+        		else if (descripcion.equals("Pintura")) {
+                	pieza = (PiezaPintura)comprador.getPieza(i);
+        		}
+        		else if (descripcion.equals("Video")) {
+                 	pieza = (PiezaVideo)comprador.getPieza(i);
+        		}
+                	
+                	
 		        		int valor = pedirEnteroAlUsuario("Indique en donde va a colocar: 1.Bodega 2. Exhibicion");
 		        		if(valor==1) {
+		        			inventario.addInventarioBodega(piezaID, pieza);
 		        			
 		        		}
+		        		else {
+		        			inventario.addInventarioExhibido(piezaID, pieza);
+		        		}
+		        		comprador.getPiezas().remove(i);
+		        		
+		        		break;
         	}
         	
         }
-        System.out.println("Pieza con ID " + idPieza + " agregada exitosamente al inventario.");
+        
+		System.out.println("Pieza con ID " + piezaID + " agregada exitosamente al inventario.");
     }
 
     private void devolverPieza() {

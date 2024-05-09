@@ -61,6 +61,10 @@ public class CompradorPropietario {
     	return piezas;
     }
     
+    public Pieza getPieza(int i ){
+    	return piezas.get(i);
+    }
+    
     public List<Pieza> getPiezasFvoritas(){
     	return piezasFavoritas;
     }
