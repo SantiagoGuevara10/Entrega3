@@ -122,12 +122,14 @@ public class ConsolaAdministrador extends ConsolaBasica {
     
     }
 
-    private void devolverPieza() {
+    private void devolverPieza() throws IOException {
         String idPieza = pedirCadenaAlUsuario("Ingrese el ID de la pieza:");
         Pieza pieza = inventario.getPiezaInventarioBodega(idPieza);
         if (pieza == null) pieza = inventario.getPiezaInventarioExhibido(idPieza);
         if (pieza == null) pieza = inventario.getPiezaInventarioPasado(idPieza);
         System.out.println("Pieza devuelta y actualizada en el inventario.");
+        users.guardarUsuarios(archivo);
+		inventario.guardarUsuarios(archivo2);
     }
 
     private void verificarUsuario() {
