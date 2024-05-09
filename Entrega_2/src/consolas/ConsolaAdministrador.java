@@ -21,11 +21,13 @@ public class ConsolaAdministrador extends ConsolaBasica {
     private InventarioGeneral inventario;
     private UsuariosRegistrados users;
     private File archivo;
+    private File archivo2;
 
-    public ConsolaAdministrador(InventarioGeneral inventario,UsuariosRegistrados users, File archivo) {
+    public ConsolaAdministrador(InventarioGeneral inventario,UsuariosRegistrados users, File archivo, File archivo2) {
         this.inventario = inventario;
         this.users=users;
         this.archivo = archivo;
+        this.archivo2 = archivo2;
     }
     
     protected void mostrarMenuPrincipal() throws IOException {
@@ -116,6 +118,7 @@ public class ConsolaAdministrador extends ConsolaBasica {
         
 		System.out.println("Pieza con ID " + piezaID + " agregada exitosamente al inventario.");
 		users.guardarUsuarios(archivo);
+		inventario.guardarUsuarios(archivo2);
     
     }
 

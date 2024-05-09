@@ -26,11 +26,13 @@ public class ConsolaCompradorPropietario extends ConsolaBasica {
     private InventarioGeneral inventario;
     public UsuariosRegistrados users;
     private File archivo;
+    private File archivo2;
 
-    public ConsolaCompradorPropietario(InventarioGeneral inventario,UsuariosRegistrados users, File archivo) {
+    public ConsolaCompradorPropietario(InventarioGeneral inventario,UsuariosRegistrados users, File archivo, File archivo2) {
         this.inventario = inventario;
         this.users = users;
         this.archivo=archivo;
+        this.archivo2 = archivo2;
     }
 
     protected void mostrarMenuPrincipal() throws IOException  {
@@ -153,6 +155,7 @@ public class ConsolaCompradorPropietario extends ConsolaBasica {
         
         comprador.agregarPieza(pieza);
         users.guardarUsuarios(archivo);
+        inventario.guardarUsuarios(archivo2);
 
     	
         

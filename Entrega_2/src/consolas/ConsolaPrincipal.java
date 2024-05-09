@@ -49,7 +49,7 @@ public class ConsolaPrincipal extends ConsolaBasica {
                     seleccionarTipoEmpleado(reader);
                     break;
                 case 2:
-                    ConsolaCompradorPropietario cocaje = new ConsolaCompradorPropietario(inventario, usuariosDelPrograma, archivo);
+                    ConsolaCompradorPropietario cocaje = new ConsolaCompradorPropietario(inventario, usuariosDelPrograma, archivo, archivo2);
                     cocaje.autenticarUsuario("CompradorPropietario", reader);
                     cocaje.mostrarOpcionesCompradorPropietario();
                     autenticarUsuario("CompradorPropietario", reader);
@@ -133,7 +133,7 @@ public class ConsolaPrincipal extends ConsolaBasica {
         switch (tipoUsuario) {
         
             case "Administrador":
-                ConsolaAdministrador consolaAdministrador = new ConsolaAdministrador(inventario, usuariosDelPrograma, archivo);
+                ConsolaAdministrador consolaAdministrador = new ConsolaAdministrador(inventario, usuariosDelPrograma, archivo, archivo2);
                 consolaAdministrador.mostrarMenuPrincipal();
                 break;
             case "Operador":
@@ -145,7 +145,7 @@ public class ConsolaPrincipal extends ConsolaBasica {
                 consolaCajero.mostrarMenuPrincipal();
                 break;
             case "CompradorPropietario":
-                ConsolaCompradorPropietario consolaComprador = new ConsolaCompradorPropietario(inventario, usuariosDelPrograma, archivo);
+                ConsolaCompradorPropietario consolaComprador = new ConsolaCompradorPropietario(inventario, usuariosDelPrograma, archivo, archivo2);
                 consolaComprador.mostrarMenuPrincipal();
                 break;
             default:
@@ -167,9 +167,10 @@ public class ConsolaPrincipal extends ConsolaBasica {
 			
 			File archivo = new File( "./datos/" + "Usuarios" );
             tipoUsuario = "Administrador";
-            ConsolaAdministrador cadmi = new ConsolaAdministrador(inventario, usuariosDelPrograma, archivo);
+            ConsolaAdministrador cadmi = new ConsolaAdministrador(inventario, usuariosDelPrograma, archivo, archivo2);
             cadmi.crearUsuario(usuariosDelPrograma);
             usuariosDelPrograma.guardarUsuarios(archivo);
+            inventario.guardarUsuarios(archivo2);
             
         }
         else if( opcionSeleccionada == 2 )
@@ -179,7 +180,7 @@ public class ConsolaPrincipal extends ConsolaBasica {
             ConsolaOperador coper = new ConsolaOperador(inventario);
             coper.crearUsuario(usuariosDelPrograma);
             usuariosDelPrograma.guardarUsuarios(archivo);
-            
+            inventario.guardarUsuarios(archivo2);
 
         }
         else if( opcionSeleccionada == 3 )
@@ -189,13 +190,14 @@ public class ConsolaPrincipal extends ConsolaBasica {
             ConsolaCajero cocaje = new ConsolaCajero(inventario);
             cocaje.crearUsuario(usuariosDelPrograma);
             usuariosDelPrograma.guardarUsuarios(archivo);
+            inventario.guardarUsuarios(archivo2);
         }
         else if( opcionSeleccionada == 4 )
         {
         	File archivo = new File( "./datos/" + "Usuarios" );
             tipoUsuario = "CompradorPropietario";
 
-            ConsolaCompradorPropietario cocaje = new ConsolaCompradorPropietario(inventario, usuariosDelPrograma, archivo);
+            ConsolaCompradorPropietario cocaje = new ConsolaCompradorPropietario(inventario, usuariosDelPrograma, archivo, archivo2);
             cocaje.crearUsuario(usuariosDelPrograma);
             cocaje.mostrarOpcionesCompradorPropietario();
             
