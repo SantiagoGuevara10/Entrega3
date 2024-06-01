@@ -4,9 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import galeria.usuarios.ManejoSesion;
-import galeria.usuarios.CompradorPropietario;
-import galeria.usuarios.Empleado;
+import java.io.IOException;
 
 public class LoginPanel extends JPanel {
     private MainFrame mainFrame;
@@ -42,34 +40,11 @@ public class LoginPanel extends JPanel {
     private void login() {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
-
-        ManejoSesion.loginEmpleado(username, password);
-        Empleado empleado = ManejoSesion.getEmpleadoActual();
-
-        if (empleado != null) {
-            switch (empleado.getRole()) {
-                case "Administrador":
-                    mainFrame.showPanel("admin");
-                    break;
-                case "Cajero":
-                    mainFrame.showPanel("cajero");
-                    break;
-                case "Operador":
-                    mainFrame.showPanel("operador");
-                    break;
-                default:
-                    JOptionPane.showMessageDialog(mainFrame, "Rol desconocido.", "Error", JOptionPane.ERROR_MESSAGE);
-                    ManejoSesion.logout();
-                    break;
-            }
-        } else {
-            ManejoSesion.loginCompradorPropietario(username, password);
-            CompradorPropietario comprador = ManejoSesion.getCompradorPropietarioActual();
-            if (comprador != null) {
-                mainFrame.showPanel("comprador");
-            } else {
-                JOptionPane.showMessageDialog(mainFrame, "Credenciales inválidas.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+        try {
+            mainFrame.autenticarUsuario(username, password);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(mainFrame, "Error al autenticar el usuario.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
+
