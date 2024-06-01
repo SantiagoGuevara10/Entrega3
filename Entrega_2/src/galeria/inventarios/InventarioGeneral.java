@@ -88,6 +88,17 @@ public class InventarioGeneral {
 	public void addInventarioPasado(String piezaId, Pieza pieza) {
 		this.inventarioPasado.put(piezaId, pieza);
 	}
+	public Pieza getPieza(String id) {
+        if (inventarioBodega.containsKey(id)) {
+            return inventarioBodega.get(id);
+        } else if (inventarioExhibido.containsKey(id)) {
+            return inventarioExhibido.get(id);
+        } else if (inventarioPasado.containsKey(id)) {
+            return inventarioPasado.get(id);
+        } else {
+            return null;
+        }
+	}
 		
 	public void addInventarioBodega(String piezaId, Pieza pieza) {
 		this.inventarioBodega.put(piezaId, pieza);
