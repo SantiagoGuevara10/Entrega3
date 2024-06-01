@@ -205,15 +205,9 @@ public class ConsolaPrincipal extends ConsolaBasica {
             cocaje.mostrarOpcionesCompradorPropietario();
             
 
-        }
-        
-        
-
-        
-
-        
-
-     }
+        }}
+    
+    
     public static void main(String[] args) throws IOException, Exception, ParseException {
         new ConsolaPrincipal().mostrarMenuPrincipal();
     }

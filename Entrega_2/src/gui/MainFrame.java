@@ -17,10 +17,10 @@ public class MainFrame extends JFrame {
     private OperadorPanel operadorPanel;
     private RegisterPanel registerPanel;
 
-    private InventarioGeneral inventario;
-    private UsuariosRegistrados usuariosDelPrograma;
-    private File archivoUsuarios = new File("./datos/Usuarios");
-    private File archivoInventario = new File("./datos/Inventario");
+    InventarioGeneral inventario;
+    UsuariosRegistrados usuariosDelPrograma;
+    File archivoUsuarios = new File("./datos/Usuarios");
+    File archivoInventario = new File("./datos/Inventario");
 
     public MainFrame() {
         cardLayout = new CardLayout();
@@ -102,13 +102,15 @@ public class MainFrame extends JFrame {
                 case "Cajero":
                     showPanel("cajero");
                     break;
-                case "Comprador":
-                    showPanel("comprador");
-                    break;
                 case "Operador":
                     showPanel("operador");
                     break;
+                    
+                case "CompradorPropietario":
+                	showPanel("comprador");
+                	break;
                 }
+            
         } else {
             JOptionPane.showMessageDialog(this, "Credenciales incorrectas o rol incorrecto.", "Error", JOptionPane.ERROR_MESSAGE);
         }
