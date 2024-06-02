@@ -116,6 +116,16 @@ public class CompradorPropietario {
         }
     }
 
+    public Pieza sacarPieza(String id) {
+    	Object pieza1 = null;
+    	for(Pieza pieza: this.piezas) {
+    		if(pieza.getIdPieza().equals(id)) {
+    			pieza1 = pieza;
+    		}
+    	}
+		return (Pieza) pieza1;
+    	
+    }
 
     
 }

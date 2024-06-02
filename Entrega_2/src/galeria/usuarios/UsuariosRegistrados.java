@@ -65,6 +65,19 @@ public class UsuariosRegistrados{
 		return (CompradorPropietario) comprador1;
 	}
 	
+	public CompradorPropietario getCompradorporid(String id, List<CompradorPropietario> compradores ) {
+		Object comprador1 = null;
+		
+		for (CompradorPropietario comprador : compradores) {
+			if (comprador.getIdUsuario().equals(id)){
+				comprador1 = comprador;
+			}
+		}
+		
+		
+		return (CompradorPropietario) comprador1;
+	}
+	
 	public void addComprador(CompradorPropietario comprador) {
 		this.compradoresEnPrograma.add(comprador);
 	}
@@ -394,7 +407,16 @@ public static UsuariosRegistrados cargarEstado( File archivo ) throws FileNotFou
 	                int valorInicial = Integer.parseInt(partes[11]);
 	                boolean esVigente = Boolean.parseBoolean(partes[13]);
 	                String descripcion = partes[14];
-	                int peso = Integer.parseInt(partes[15]);
+	                int peso;
+					try {
+	                    
+	                    double tempValue = Double.parseDouble(partes[15]);
+	                    peso = (int) tempValue;
+	                } catch (NumberFormatException e) {
+	                    
+	                    e.printStackTrace();
+	                    peso = 0; 
+	                }
 	                boolean usaElectricidad = Boolean.parseBoolean(partes[16]);
 	                PiezaEscultura pieza = new PiezaEscultura(idPieza, titulo, anioCreacion, lugarCreacion , estadoPieza, estaExhibida, disponibleVenta, autores, valorFijo, valorMinimo, valorInicial, fecha,esVigente, descripcion, peso, usaElectricidad);
 

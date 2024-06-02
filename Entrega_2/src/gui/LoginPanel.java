@@ -1,9 +1,14 @@
 package gui;
 
 import javax.swing.*;
+
+import galeria.inventarios.InventarioGeneral;
+import galeria.usuarios.UsuariosRegistrados;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 
 public class LoginPanel extends JPanel {
@@ -11,7 +16,7 @@ public class LoginPanel extends JPanel {
     private JTextField usernameField;
     private JPasswordField passwordField;
 
-    public LoginPanel(MainFrame mainFrame) {
+    public LoginPanel(MainFrame mainFrame, InventarioGeneral inventario, UsuariosRegistrados usuariosDelPrograma, File archivoUsuarios, File archivoInventario) {
         this.mainFrame = mainFrame;
         setLayout(new GridLayout(3, 2, 10, 10));
 

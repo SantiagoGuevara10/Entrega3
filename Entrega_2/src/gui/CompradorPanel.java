@@ -7,42 +7,52 @@ import galeria.inventarios.PiezaPintura;
 import galeria.inventarios.PiezaVideo;
 import galeria.pieza.Pieza;
 import galeria.usuarios.CompradorPropietario;
-import galeria.usuarios.ManejoSesion;
 import galeria.usuarios.UsuariosRegistrados;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
 public class CompradorPanel extends JPanel {
     private MainFrame mainFrame;
-    private JTextArea piezasArea;
     private CompradorPropietario comprador;
     private InventarioGeneral inventario;
     private UsuariosRegistrados usuariosRegistrados;
     private File archivoUsuarios;
     private File archivoInventario;
-	private String username;
+    private String username;
 
     public CompradorPanel(MainFrame mainFrame, InventarioGeneral inventario, UsuariosRegistrados usuariosRegistrados, File archivoUsuarios, File archivoInventario, String username, String password) {
         this.mainFrame = mainFrame;
         this.inventario = inventario;
         this.usuariosRegistrados = usuariosRegistrados;
         this.archivoUsuarios = archivoUsuarios;
-
+        this.archivoInventario = archivoInventario;
         this.username = username;
 
         setLayout(new BorderLayout());
 
-        piezasArea = new JTextArea();
-        piezasArea.setEditable(false);
-        add(new JScrollPane(piezasArea), BorderLayout.CENTER);
+        // Panel superior para la imagen
+        JPanel imagePanel = new JPanel();
+        JLabel imageLabel = new JLabel();
+        ImageIcon imageIcon = new ImageIcon("./datos/galeria1.png");
 
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 1));
+        // Redimensionar la imagen si es necesario
+        Image image = imageIcon.getImage();
+        Image scaledImage = image.getScaledInstance(512, 256, Image.SCALE_SMOOTH);
+        imageIcon = new ImageIcon(scaledImage);
+
+        imageLabel.setIcon(imageIcon);
+        imagePanel.add(imageLabel);
+        add(imagePanel, BorderLayout.NORTH);
+        
+        // Panel central para los botones
+        JPanel buttonPanel = new JPanel(new GridLayout(4, 1, 10, 10));
         JButton verPiezasButton = new JButton("Ver Piezas");
         verPiezasButton.addActionListener(e -> mostrarPiezas());
         buttonPanel.add(verPiezasButton);
@@ -57,28 +67,30 @@ public class CompradorPanel extends JPanel {
 
         JButton backButton = new JButton("Volver");
         backButton.addActionListener(e -> mainFrame.showPanel("login"));
-        add(backButton, BorderLayout.NORTH);
+        buttonPanel.add(backButton);
 
-        add(buttonPanel, BorderLayout.SOUTH);
+        JPanel centerPanel = new JPanel(new GridBagLayout());
+        centerPanel.add(buttonPanel);
+        add(centerPanel, BorderLayout.CENTER);
     }
 
     private void mostrarPiezas() {
-    	List<CompradorPropietario> compradores = usuariosRegistrados.getCompradoresEnPrograma();
-    	CompradorPropietario comprador = usuariosRegistrados.getComprador(mainFrame.getUsernameProfile(), compradores);
+        List<CompradorPropietario> compradores = usuariosRegistrados.getCompradoresEnPrograma();
+        CompradorPropietario comprador = usuariosRegistrados.getComprador(mainFrame.getUsernameProfile(), compradores);
         if (comprador != null) {
             StringBuilder sb = new StringBuilder();
             for (Pieza pieza : comprador.getPiezas()) {
                 sb.append(pieza.getTitulo()).append(" - ").append(pieza.getEstadoPieza()).append("\n");
             }
-            piezasArea.setText(sb.toString());
+            JOptionPane.showMessageDialog(mainFrame, sb.toString(), "Piezas", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(mainFrame, "No hay un comprador activo.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void registrarPieza() {
-    	List<CompradorPropietario> compradores = usuariosRegistrados.getCompradoresEnPrograma();
-    	CompradorPropietario comprador = usuariosRegistrados.getComprador(mainFrame.getUsernameProfile(), compradores);
+        List<CompradorPropietario> compradores = usuariosRegistrados.getCompradoresEnPrograma();
+        CompradorPropietario comprador = usuariosRegistrados.getComprador(mainFrame.getUsernameProfile(), compradores);
         if (comprador != null) {
             try {
                 Random random = new Random();
@@ -96,7 +108,7 @@ public class CompradorPanel extends JPanel {
                 String estadoPieza = JOptionPane.showInputDialog("Condiciones en las que se encuentra la pieza");
                 boolean estaExhibida = false;
                 boolean disponibleVenta = false;
-                List<String> autores = List.of(JOptionPane.showInputDialog("Ingrese los autores de la obra y separe por , cada uno").split(","));
+                List<String> autores = Arrays.asList(JOptionPane.showInputDialog("Ingrese los autores de la obra y separe por , cada uno").split(","));
                 double valorFijo = 0;
                 int valorMinimo = 0;
                 int valorInicial = 0;
@@ -107,7 +119,7 @@ public class CompradorPanel extends JPanel {
                 switch (opcion) {
                     case 1:
                         descripcion = "Escultura";
-                        int peso = Integer.parseInt(JOptionPane.showInputDialog("Indique el peso de la pieza"));
+                        float peso = Integer.parseInt(JOptionPane.showInputDialog("Indique el peso de la pieza"));
                         boolean usaElectricidad = JOptionPane.showConfirmDialog(null, "La escultura usa electricidad?", "Confirmar", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
                         pieza = new PiezaEscultura(idPieza, titulo, anioCreacion, lugarCreacion, estadoPieza, estaExhibida, disponibleVenta, autores, valorFijo, valorMinimo, valorInicial, new Date(), true, descripcion, peso, usaElectricidad);
                         break;
@@ -147,26 +159,25 @@ public class CompradorPanel extends JPanel {
     }
 
     private void realizarCompra() {
-    	List<CompradorPropietario> compradores = usuariosRegistrados.getCompradoresEnPrograma();
-    	CompradorPropietario comprador = usuariosRegistrados.getComprador(mainFrame.getUsernameProfile(), compradores);
+        List<CompradorPropietario> compradores = usuariosRegistrados.getCompradoresEnPrograma();
+        CompradorPropietario comprador = usuariosRegistrados.getComprador(mainFrame.getUsernameProfile(), compradores);
         if (comprador != null) {
             String idPieza = JOptionPane.showInputDialog("Ingrese el ID de la pieza que desea comprar:");
-            
-            
-        	
+
             Pieza pieza = inventario.getPiezaInventarioBodega(idPieza);
-            if (pieza== null) {
-            	Pieza pieza1 = inventario.getPiezaInventarioExhibido(idPieza);
-            	pieza = pieza1;
+            if (pieza == null) {
+                pieza = inventario.getPiezaInventarioExhibido(idPieza);
             }
-            
-            
+
             if (pieza != null && pieza.getDisponibleVenta()) {
                 double precio = pieza.getValorFijo();
                 if (comprador.getDinero() >= precio) {
                     comprador.setDinero(comprador.getDinero() - precio);
                     comprador.getPiezas().add(pieza);
                     inventario.removeInventarioBodega(pieza.getIdPieza());
+                    inventario.removeInventarioExhibido(pieza.getIdPieza());
+                    inventario.addInventarioPasado(pieza.getIdPieza(), pieza);
+                    inventario.addInventarioDinero((int) precio);
                     try {
                         usuariosRegistrados.guardarUsuarios(archivoUsuarios);
                         inventario.guardarUsuarios(archivoInventario);

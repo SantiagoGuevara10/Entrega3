@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import galeria.inventarios.InventarioGeneral;
 import galeria.pieza.Pieza;
 import galeria.usuarios.*;
 
@@ -23,7 +24,7 @@ public class RegisterPanel extends JPanel {
     private JTextField nombreField;
     private JTextField idField;
 
-    public RegisterPanel(MainFrame mainFrame) {
+    public RegisterPanel(MainFrame mainFrame, InventarioGeneral inventario, UsuariosRegistrados usuariosDelPrograma, File archivoUsuarios, File archivoInventario) {
         this.mainFrame = mainFrame;
         setLayout(new GridLayout(6, 2, 10, 10));
 

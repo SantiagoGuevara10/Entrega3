@@ -38,6 +38,9 @@ public class InventarioGeneral {
         subastasEnProceso = new LinkedList<>();
     }
 	
+    public void addInventarioDinero(int dinero) {
+    	inventarioDinero += dinero;
+    }
 	
 	public Map<String,Pieza> getInventarioPasado(){
 		return inventarioPasado;
@@ -93,9 +96,7 @@ public class InventarioGeneral {
             return inventarioBodega.get(id);
         } else if (inventarioExhibido.containsKey(id)) {
             return inventarioExhibido.get(id);
-        } else if (inventarioPasado.containsKey(id)) {
-            return inventarioPasado.get(id);
-        } else {
+        }  else {
             return null;
         }
 	}
@@ -441,7 +442,14 @@ public static InventarioGeneral cargarEstado( File archivo ) throws FileNotFound
 	                String descripcion = partes[14];
 	            	
 	            	if( partes[ 1 ].equals( "Escultura" ) )
-		            {int peso = Integer.parseInt(partes[15]);
+		            {int peso;
+					try {
+		                double tempValue = Double.parseDouble(partes[15]);
+		                peso = (int) tempValue;
+		            } catch (NumberFormatException e) {
+		                e.printStackTrace();
+		                peso = 0; 
+		            }
 		                boolean usaElectricidad = Boolean.parseBoolean(partes[16]);
 		                PiezaEscultura pieza = new PiezaEscultura(idPieza, titulo, anioCreacion, lugarCreacion , estadoPieza, estaExhibida, disponibleVenta, autores, valorFijo, valorMinimo, valorInicial, fecha,esVigente, descripcion, peso, usaElectricidad);
 
@@ -460,7 +468,14 @@ public static InventarioGeneral cargarEstado( File archivo ) throws FileNotFound
 	            	
 	            	else if( partes[ 1 ].equals( "Pintura" ) )
 		            {
-	            		int peso = Integer.parseInt(partes[15]);
+	            		int peso;
+						try {
+			                double tempValue = Double.parseDouble(partes[15]);
+			                peso = (int) tempValue;
+			            } catch (NumberFormatException e) {
+			                e.printStackTrace();
+			                peso = 0; 
+			            }
 		                String tecnica = partes[16];
 		                PiezaPintura pieza = new PiezaPintura(idPieza, titulo, anioCreacion, lugarCreacion , estadoPieza, estaExhibida, disponibleVenta, autores, valorFijo, valorMinimo, valorInicial, fecha,esVigente, descripcion, peso, tecnica);
 		                inventarioExhibido.put(idPieza, pieza);
@@ -502,7 +517,14 @@ public static InventarioGeneral cargarEstado( File archivo ) throws FileNotFound
                 String descripcion = partes[14];
             	
             	if( partes[ 1 ].equals( "Escultura" ) )
-	            {int peso = Integer.parseInt(partes[15]);
+	            {int peso;
+				try {
+	                double tempValue = Double.parseDouble(partes[15]);
+	                peso = (int) tempValue;
+	            } catch (NumberFormatException e) {
+	                e.printStackTrace();
+	                peso = 0; 
+	            }
 	                boolean usaElectricidad = Boolean.parseBoolean(partes[16]);
 	                PiezaEscultura pieza = new PiezaEscultura(idPieza, titulo, anioCreacion, lugarCreacion , estadoPieza, estaExhibida, disponibleVenta, autores, valorFijo, valorMinimo, valorInicial, fecha,esVigente, descripcion, peso, usaElectricidad);
 
@@ -521,7 +543,14 @@ public static InventarioGeneral cargarEstado( File archivo ) throws FileNotFound
             	
             	else if( partes[ 1 ].equals( "Pintura" ) )
 	            {
-            		int peso = Integer.parseInt(partes[15]);
+            		int peso;
+					try {
+		                double tempValue = Double.parseDouble(partes[15]);
+		                peso = (int) tempValue;
+		            } catch (NumberFormatException e) {
+		                e.printStackTrace();
+		                peso = 0; 
+		            }
 	                String tecnica = partes[16];
 	                PiezaPintura pieza = new PiezaPintura(idPieza, titulo, anioCreacion, lugarCreacion , estadoPieza, estaExhibida, disponibleVenta, autores, valorFijo, valorMinimo, valorInicial, fecha,esVigente, descripcion, peso, tecnica);
 	                inventarioBodega.put(idPieza, pieza);
@@ -565,7 +594,15 @@ public static InventarioGeneral cargarEstado( File archivo ) throws FileNotFound
 	                String descripcion = partes[14];
 	            	
 	            	if( partes[ 1 ].equals( "Escultura" ) )
-		            {int peso = Integer.parseInt(partes[15]);
+		            {
+		            int peso;
+					try {
+		                double tempValue = Double.parseDouble(partes[15]);
+		                peso = (int) tempValue;
+		            } catch (NumberFormatException e) {
+		                e.printStackTrace();
+		                peso = 0; 
+		            }
 		                boolean usaElectricidad = Boolean.parseBoolean(partes[16]);
 		                PiezaEscultura pieza = new PiezaEscultura(idPieza, titulo, anioCreacion, lugarCreacion , estadoPieza, estaExhibida, disponibleVenta, autores, valorFijo, valorMinimo, valorInicial, fecha,esVigente, descripcion, peso, usaElectricidad);
 
@@ -584,7 +621,14 @@ public static InventarioGeneral cargarEstado( File archivo ) throws FileNotFound
 	            	
 	            	else if( partes[ 1 ].equals( "Pintura" ) )
 		            {
-	            		int peso = Integer.parseInt(partes[15]);
+	            		int peso;
+						try {
+			                double tempValue = Double.parseDouble(partes[15]);
+			                peso = (int) tempValue;
+			            } catch (NumberFormatException e) {
+			                e.printStackTrace();
+			                peso = 0; 
+			            }
 		                String tecnica = partes[16];
 		                PiezaPintura pieza = new PiezaPintura(idPieza, titulo, anioCreacion, lugarCreacion , estadoPieza, estaExhibida, disponibleVenta, autores, valorFijo, valorMinimo, valorInicial, fecha,esVigente, descripcion, peso, tecnica);
 		                inventarioPasado.put(idPieza, pieza);

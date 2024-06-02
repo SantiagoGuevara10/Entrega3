@@ -1,5 +1,12 @@
 Información del inventario
-Exhibido:Pintura:710:La noche estrellada:1840:Paris:bien:false:true:1000000.0:700000:500000:5824-05-08:true:Pintura:125:cubismo
-Exhibido:Autor:710:da vinci
-Dinero:0.0
+Exhibido:Escultura:452:Venus de Milo:130:Grecia:Bien:false:false:4572000.0:700000:500000:5824-06-02:true:Escultura:50.0:false
+Exhibido:Autor:452:Alejandro de Antioquía
+Pasado:Pintura:710:La noche estrellada:1840:Paris:bien:false:true:1000000.0:700000:500000:15324-05-08:true:Pintura:125:cubismo
+Pasado:Autor:710:da vinci
+
+
+Dinero:2000000.0
+
 Información de las subastas
+
+

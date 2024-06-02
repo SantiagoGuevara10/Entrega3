@@ -9,6 +9,7 @@ import galeria.usuarios.UsuariosRegistrados;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class CajeroPanel extends JPanel {
     private Cajero cajero;
     private List<String> transacciones = new ArrayList<>();
 
-    public CajeroPanel(MainFrame mainFrame) {
+    public CajeroPanel(MainFrame mainFrame, InventarioGeneral inventario2, UsuariosRegistrados usuariosDelPrograma, File archivoUsuarios, File archivoInventario) {
         this.mainFrame = mainFrame;
         this.inventario = mainFrame.inventario;
         this.usuarios = mainFrame.usuariosDelPrograma;
@@ -30,8 +31,20 @@ public class CajeroPanel extends JPanel {
 
         setLayout(new BorderLayout());
 
+        JPanel imagePanel = new JPanel();
+        JLabel imageLabel = new JLabel();
+        ImageIcon imageIcon = new ImageIcon("./datos/galeria2.jpeg");
+
+        Image image = imageIcon.getImage();
+        Image scaledImage = image.getScaledInstance(480, 270, Image.SCALE_SMOOTH);
+        imageIcon = new ImageIcon(scaledImage);
+
+        imageLabel.setIcon(imageIcon);
+        imagePanel.add(imageLabel);
+        add(imagePanel, BorderLayout.NORTH);
+
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(2, 1));
+        buttonPanel.setLayout(new GridLayout(3, 1, 10, 10));
 
         JButton processPaymentButton = new JButton("Procesar Pago");
         processPaymentButton.addActionListener(e -> new PaymentDialog(mainFrame).setVisible(true));
@@ -41,11 +54,13 @@ public class CajeroPanel extends JPanel {
         issueReceiptsButton.addActionListener(e -> emitirRecibos());
         buttonPanel.add(issueReceiptsButton);
 
-        add(buttonPanel, BorderLayout.CENTER);
-
         JButton backButton = new JButton("Volver");
         backButton.addActionListener(e -> mainFrame.showPanel("login"));
-        add(backButton, BorderLayout.SOUTH);
+        buttonPanel.add(backButton);
+
+        JPanel centerPanel = new JPanel(new GridBagLayout());
+        centerPanel.add(buttonPanel);
+        add(centerPanel, BorderLayout.CENTER);
     }
 
     private void emitirRecibos() {

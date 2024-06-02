@@ -195,7 +195,9 @@ public class ConsolaCompradorPropietario extends ConsolaBasica {
 			if (compradordelPrograma.getDinero() >= precio) {
 				compradordelPrograma.setDinero(compradordelPrograma.getDinero() - precio);
 				compradordelPrograma.getPiezas().add(pieza);
-                inventario.removeInventarioBodega(pieza.getIdPieza());  
+                inventario.removeInventarioBodega(pieza.getIdPieza());
+                inventario.removeInventarioExhibido(pieza.getIdPieza());
+                inventario.addInventarioPasado(pieza.getIdPieza(), pieza);
                 System.out.println("Compra realizada exitosamente. Pieza agregada a tu colección.");
             } else {
                 System.out.println("No tienes suficiente dinero para realizar esta compra.");

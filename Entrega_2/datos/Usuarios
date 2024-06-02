@@ -4,10 +4,12 @@ tipo:Administrador:Juan Murillo:796:j.murilloa12:Mama1212
 tipo:Cajero:Sofia Paez:83982:sof.p123:sof.p123
 tipo:Cajero:Abraham Bohorquez:5843:ab.bohorquez:abjesus@
 tipo:Cajero:santiago:123:santiago:santiago
+tipo:Cajero:Camilo:2948:cami123:cami123
+tipo:Operador:Camilo Mateus:2948:mate1212:mate1212
 Información de los compradores
-Comprador:90:juan jose:j.murilloa:121212:3155037546:200000.0:true
-Pintura:90:300:la gioconda:1923:italia:bien:false:false:0.0:0:0:28624-05-08:true:Pintura:123:realismo
+Comprador:90:juan jose:j.murilloa:121212:3155037546:1.999997E12:true
+Pintura:90:300:la gioconda:1923:italia:bien:false:false:697430.0:700000:500000:41924-05-08:true:Pintura:123:realismo
 Autor:90:300:david
-Pintura:90:710:La noche estrellada:1840:Paris:bien:false:true:1000000.0:700000:500000:7724-05-08:true:Pintura:125:cubismo
-Autor:90:710:da vinci
 Comprador:952:Manuel Medina:manu.19:Manu1412:3155027705:1.2E7:true
+Pintura:952:710:La noche estrellada:1840:Paris:bien:false:true:1000000.0:700000:500000:17224-05-08:true:Pintura:125:cubismo
+Autor:952:710:da vinci

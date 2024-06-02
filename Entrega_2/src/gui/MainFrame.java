@@ -39,14 +39,14 @@ public class MainFrame extends JFrame {
         }
 
       
-        loginPanel = new LoginPanel(this);
-        adminPanel = new AdminPanel(this);
-        cajeroPanel = new CajeroPanel(this);
+        loginPanel = new LoginPanel(this, this.inventario, this.usuariosDelPrograma,archivoUsuarios,archivoInventario);
+        adminPanel = new AdminPanel(this, this.inventario, this.usuariosDelPrograma,archivoUsuarios,archivoInventario);
+        cajeroPanel = new CajeroPanel(this, this.inventario, this.usuariosDelPrograma,archivoUsuarios,archivoInventario);
         this.username = "";
         this.password = "";
 		compradorPanel = new CompradorPanel(this, this.inventario, this.usuariosDelPrograma,archivoUsuarios,archivoInventario, username, password);
-        operadorPanel = new OperadorPanel(this);
-        registerPanel = new RegisterPanel(this);
+        operadorPanel = new OperadorPanel(this, this.inventario, this.usuariosDelPrograma,archivoUsuarios,archivoInventario);
+        registerPanel = new RegisterPanel(this, this.inventario, this.usuariosDelPrograma,archivoUsuarios,archivoInventario);
 
         cardPanel.add(loginPanel, "login");
         cardPanel.add(adminPanel, "admin");
