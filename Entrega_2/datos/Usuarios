@@ -4,10 +4,8 @@ tipo:Administrador:Juan Murillo:796:j.murilloa12:Mama1212
 tipo:Cajero:Sofia Paez:83982:sof.p123:sof.p123
 tipo:Cajero:Abraham Bohorquez:5843:ab.bohorquez:abjesus@
 tipo:Cajero:santiago:123:santiago:santiago
-tipo:Cajero:santiago:123:santiago:santiago
-tipo:Cajero:santiago:123:santiago:santiago
 Información de los compradores
 Comprador:90:juan jose:j.murilloa:121212:3155037546:1200000.0:true
-Pintura:90:300:la gioconda:1923:italia:bien:false:false:0.0:0:0:24824-05-08:true:Pintura:123:realismo
+Pintura:90:300:la gioconda:1923:italia:bien:false:false:0.0:0:0:26724-05-08:true:Pintura:123:realismo
 Autor:90:300:david
-Comprador:952:Manuel Medina:manu.19:Manu1412:3155027705:1.2E7:false
+Comprador:952:Manuel Medina:manu.19:Manu1412:3155027705:1.2E7:true

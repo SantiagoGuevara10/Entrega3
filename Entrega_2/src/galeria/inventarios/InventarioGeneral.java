@@ -336,13 +336,13 @@ public class InventarioGeneral {
 
                 }}
     		
-    		
+    		writer.println("\n");
     		double valor = inventarioDinero;
     		String dineroo = String.valueOf(valor);
     		writer.print("Dinero"+":"+dineroo);
-    		
+    		writer.println("\n");
 	        writer.println("Información de las subastas");
-	        
+	        writer.println("\n");
 	        for(int i=0;i< subastasEnProceso.size();i++) {
 	        	List<String> idPiezasDisponibles = subastasEnProceso.get(i).getIdPiezasDisponibles();
 	        	List<Oferta> ofertas = subastasEnProceso.get(i).getOfertas();
