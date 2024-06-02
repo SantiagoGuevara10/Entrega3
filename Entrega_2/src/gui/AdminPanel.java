@@ -13,15 +13,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AdminPanel extends JPanel {
     private MainFrame mainFrame;
     private InventarioGeneral inventario;
     private Administrador admin;
     private UsuariosRegistrados usuarios;
-	private File archivoUsuarios;
-	private File archivoInventario;
+    private File archivoUsuarios;
+    private File archivoInventario;
 
     public AdminPanel(MainFrame mainFrame, InventarioGeneral inventario, UsuariosRegistrados usuariosDelPrograma, File archivoUsuarios, File archivoInventario) {
         this.mainFrame = mainFrame;
@@ -30,7 +32,6 @@ public class AdminPanel extends JPanel {
         this.archivoUsuarios = archivoUsuarios;
         this.archivoInventario = archivoInventario;
         this.admin = (Administrador) mainFrame.usuariosDelPrograma.getUsuariosEnPrograma().stream()
-        
                 .filter(user -> user instanceof Administrador)
                 .findFirst()
                 .orElse(null);
@@ -42,33 +43,31 @@ public class AdminPanel extends JPanel {
 
         // Adding buttons for administrative options
         addButton(gbc, "Agregar Pieza", e -> {
-			try {
-				agregarPieza(e);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}, 0);
+            try {
+                agregarPieza(e);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }, 0);
         addButton(gbc, "Devolver Pieza", e -> {
-			try {
-				devolverPieza(e);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}, 1);
+            try {
+                devolverPieza(e);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }, 1);
         addButton(gbc, "Verificar Usuario", e -> {
-			try {
-				verificarUsuario(e);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}, 2);
+            try {
+                verificarUsuario(e);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }, 2);
         addButton(gbc, "Registrar Oferta", this::registrarOferta, 3);
         addButton(gbc, "Ver Historia de Compras", this::verHistoriaCompras, 4);
         addButton(gbc, "Calcular Valor de Colección", this::calcularValorColeccion, 5);
-        addButton(gbc, "Volver", e -> mainFrame.showPanel("login"), 6);
+        addButton(gbc, "Ver Ventas", this::verVentas, 6);
+        addButton(gbc, "Volver", e -> mainFrame.showPanel("login"), 7);
     }
 
     private void addButton(GridBagConstraints gbc, String text, ActionListener action, int y) {
@@ -131,40 +130,39 @@ public class AdminPanel extends JPanel {
             return;
         }
 
-        String idUsuario = JOptionPane.showInputDialog(this, "Ingrese el ID de la persona a la cual se le devuelve la pieza:");
-        if (idUsuario == null || idUsuario.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "ID del usuario no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
         Pieza pieza = inventario.getPieza(idPieza);
         if (pieza == null) {
             JOptionPane.showMessageDialog(this, "Pieza no encontrada en el inventario.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        inventario.removeInventarioBodega(idPieza);
-        inventario.removeInventarioExhibido(idPieza);
-        CompradorPropietario comprador = buscarCompradorPorId(idUsuario);
+        String idComprador = JOptionPane.showInputDialog(this, "Ingrese el ID del comprador:");
+        if (idComprador == null || idComprador.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "ID del comprador no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        CompradorPropietario comprador = buscarCompradorPorId(idComprador);
         if (comprador == null) {
             JOptionPane.showMessageDialog(this, "Comprador no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        comprador.agregarPieza(pieza);
 
-        JOptionPane.showMessageDialog(this, "Pieza devuelta y actualizada en el inventario.");
+        comprador.agregarPieza(pieza);
+        JOptionPane.showMessageDialog(this, "Pieza devuelta correctamente al comprador.");
         usuarios.guardarUsuarios(archivoUsuarios);
         inventario.guardarUsuarios(archivoInventario);
     }
 
     private void verificarUsuario(ActionEvent e) throws IOException {
-        String idUsuario = JOptionPane.showInputDialog(this, "Ingrese el ID del usuario a verificar:");
+        String idUsuario = JOptionPane.showInputDialog(this, "Ingrese el ID del usuario:");
         if (idUsuario == null || idUsuario.isEmpty()) {
             JOptionPane.showMessageDialog(this, "ID del usuario no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        CompradorPropietario usuario = buscarCompradorPorId(idUsuario);
+        CompradorPropietario usuario = (CompradorPropietario) usuarios.getCompradorporid(idUsuario, usuarios.getCompradoresEnPrograma());
+        
         if (usuario == null) {
             JOptionPane.showMessageDialog(this, "Usuario no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -244,6 +242,31 @@ public class AdminPanel extends JPanel {
         JOptionPane.showMessageDialog(this, "El valor de la colección del comprador es: " + valor);
     }
 
+    private void verVentas(ActionEvent e) {
+        // Aquí se debería obtener la información de ventas del inventario o la base de datos correspondiente.
+        // Para este ejemplo, se generarán datos de ventas ficticios.
+        Map<String, Integer> salesData = generateFakeSalesData();
+
+        JFrame salesFrame = new JFrame("Calendario de Ventas");
+        salesFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        salesFrame.add(new SalesCalendar(salesData));
+        salesFrame.pack();
+        salesFrame.setLocationRelativeTo(null);
+        salesFrame.setVisible(true);
+    }
+
+    private Map<String, Integer> generateFakeSalesData() {
+        Map<String, Integer> salesData = new HashMap<>();
+        for (int month = 0; month < 12; month++) {
+            for (int week = 0; week < 5; week++) {
+                for (int day = 0; day < 31; day++) {
+                    salesData.put(month + "-" + week + "-" + day, (int) (Math.random() * 25)); // Generar ventas aleatorias entre 0 y 25
+                }
+            }
+        }
+        return salesData;
+    }
+
     private CompradorPropietario buscarCompradorPorId(String idComprador) {
         List<CompradorPropietario> listaCompradores = usuarios.getCompradoresEnPrograma();
         for (CompradorPropietario comprador : listaCompradores) {
@@ -253,6 +276,4 @@ public class AdminPanel extends JPanel {
         }
         return null;
     }
-
-    
 }
