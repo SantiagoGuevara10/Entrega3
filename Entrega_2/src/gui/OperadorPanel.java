@@ -28,7 +28,7 @@ public class OperadorPanel extends JPanel {
 
         JPanel imagePanel = new JPanel();
         JLabel imageLabel = new JLabel();
-        ImageIcon imageIcon = new ImageIcon("./datos/galeria2.jpeg");
+        ImageIcon imageIcon = new ImageIcon("./datos/galeria3.jpg");
 
         Image image = imageIcon.getImage();
         Image scaledImage = image.getScaledInstance(480, 270, Image.SCALE_SMOOTH);
@@ -39,13 +39,7 @@ public class OperadorPanel extends JPanel {
         add(imagePanel, BorderLayout.NORTH);
 
         JPanel buttonPanel = new JPanel(new GridLayout(3, 2));
-        buttonPanel.add(new JLabel("ID de Pieza:"));
-        idPiezaField = new JTextField();
-        buttonPanel.add(idPiezaField);
-
-        buttonPanel.add(new JLabel("Monto de Oferta:"));
-        montoOfertaField = new JTextField();
-        buttonPanel.add(montoOfertaField);
+      
 
         JButton registrarOfertaButton = new JButton("Registrar Oferta");
         registrarOfertaButton.addActionListener(e -> registrarOferta());
