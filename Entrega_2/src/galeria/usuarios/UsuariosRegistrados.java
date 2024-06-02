@@ -52,6 +52,19 @@ public class UsuariosRegistrados{
 		return usuariosEnPrograma;
 	}
 	
+	public CompradorPropietario getComprador(String id, List<CompradorPropietario> compradores ) {
+		Object comprador1 = null;
+		
+		for (CompradorPropietario comprador : compradores) {
+			if (comprador.getUsername().equals(id)){
+				comprador1 = comprador;
+			}
+		}
+		
+		
+		return (CompradorPropietario) comprador1;
+	}
+	
 	public void addComprador(CompradorPropietario comprador) {
 		this.compradoresEnPrograma.add(comprador);
 	}
@@ -63,6 +76,17 @@ public class UsuariosRegistrados{
 	public List<CompradorPropietario> getCompradoresEnPrograma() {
 		return compradoresEnPrograma;
 	}
+	
+	public List<Integer> getAllUserIds() {
+        List<Integer> ids = new LinkedList<>();
+        for (Empleado usuario : usuariosEnPrograma) {
+            ids.add(Integer.parseInt(usuario.getIdEmpleado()));
+        }
+        for (CompradorPropietario comprador : compradoresEnPrograma) {
+            ids.add(Integer.parseInt(comprador.getIdUsuario()));
+        }
+        return ids;
+    }
 	
 	 public void guardarUsuarios( File archivo ) throws IOException
 	    {

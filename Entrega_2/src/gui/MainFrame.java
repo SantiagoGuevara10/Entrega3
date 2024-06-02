@@ -21,6 +21,8 @@ public class MainFrame extends JFrame {
     UsuariosRegistrados usuariosDelPrograma;
     File archivoUsuarios = new File("./datos/Usuarios");
     File archivoInventario = new File("./datos/Inventario");
+	private String username;
+	private String password;
 
     public MainFrame() {
         cardLayout = new CardLayout();
@@ -40,7 +42,9 @@ public class MainFrame extends JFrame {
         loginPanel = new LoginPanel(this);
         adminPanel = new AdminPanel(this);
         cajeroPanel = new CajeroPanel(this);
-        compradorPanel = new CompradorPanel(this);
+        this.username = "";
+        this.password = "";
+		compradorPanel = new CompradorPanel(this, this.inventario, this.usuariosDelPrograma,archivoUsuarios,archivoInventario, username, password);
         operadorPanel = new OperadorPanel(this);
         registerPanel = new RegisterPanel(this);
 
@@ -61,10 +65,16 @@ public class MainFrame extends JFrame {
     public void showPanel(String panelName) {
         cardLayout.show(cardPanel, panelName);
     }
+    
+    public String getUsernameProfile() {
+    	return this.username;
+    }
 
     public void autenticarUsuario(String username, String password) throws IOException {
         boolean autenticado = false;
         String tipoUsuario = "";
+        this.username = username;
+        this.password = password;
 
         for (Empleado empleado : usuariosDelPrograma.getUsuariosEnPrograma()) {
             if (empleado.getUsername().equals(username) && empleado.getPasswordHash().equals(password)) {
