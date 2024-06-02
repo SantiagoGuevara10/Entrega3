@@ -26,6 +26,17 @@ public class MainFrame extends JFrame {
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
 
+    
+        try {
+            this.inventario = InventarioGeneral.cargarEstado(archivoInventario);
+            this.usuariosDelPrograma = UsuariosRegistrados.cargarEstado(archivoUsuarios);
+        } catch (IOException | ParseException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar el estado inicial.", "Error", JOptionPane.ERROR_MESSAGE);
+            this.inventario = new InventarioGeneral();
+            this.usuariosDelPrograma = new UsuariosRegistrados(); 
+        }
+
+      
         loginPanel = new LoginPanel(this);
         adminPanel = new AdminPanel(this);
         cajeroPanel = new CajeroPanel(this);
@@ -45,14 +56,6 @@ public class MainFrame extends JFrame {
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-
-        // Cargar estado inicial
-        try {
-            this.inventario = InventarioGeneral.cargarEstado(archivoInventario);
-            this.usuariosDelPrograma = UsuariosRegistrados.cargarEstado(archivoUsuarios);
-        } catch (IOException | ParseException e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar el estado inicial.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
     }
 
     public void showPanel(String panelName) {
@@ -63,38 +66,27 @@ public class MainFrame extends JFrame {
         boolean autenticado = false;
         String tipoUsuario = "";
 
-        // Read the user data from the file
-        try (BufferedReader reader = new BufferedReader(new FileReader(archivoUsuarios))) {
-            String line;
-            
+        for (Empleado empleado : usuariosDelPrograma.getUsuariosEnPrograma()) {
+            if (empleado.getUsername().equals(username) && empleado.getPasswordHash().equals(password)) {
+                autenticado = true;
+                tipoUsuario = empleado.getRole();
+                break;
+            }
+        }
 
-            
-            for (Empleado empleado : usuariosDelPrograma.getUsuariosEnPrograma()) {
-                if (empleado.getUsername().equals(username) && empleado.getPasswordHash().equals(password)) {
+        if (!autenticado) {
+            for (CompradorPropietario comprador : usuariosDelPrograma.getCompradoresEnPrograma()) {
+                if (comprador.getUsername().equals(username) && comprador.getPasswordHash().equals(password)) {
                     autenticado = true;
-                    tipoUsuario = empleado.getRole();
+                    tipoUsuario = "CompradorPropietario";
                     break;
                 }
             }
-
-            
-            if (!autenticado) {
-                for (CompradorPropietario comprador : usuariosDelPrograma.getCompradoresEnPrograma()) {
-                    if (comprador.getUsername().equals(username) && comprador.getPasswordHash().equals(password)) {
-                        autenticado = true;
-                        tipoUsuario = "CompradorPropietario";
-                        break;
-                    }
-                }
-            }
-            } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error al leer el archivo de usuarios.", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
         if (autenticado) {
             JOptionPane.showMessageDialog(this, "Autenticación exitosa. Bienvenido " + tipoUsuario + ".", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            // Show the relevant panel based on user role
-            
+           
             switch (tipoUsuario) {
                 case "Administrador":
                     showPanel("admin");
@@ -105,12 +97,12 @@ public class MainFrame extends JFrame {
                 case "Operador":
                     showPanel("operador");
                     break;
-                    
                 case "CompradorPropietario":
-                	showPanel("comprador");
-                	break;
-                }
-            
+                    showPanel("comprador");
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + tipoUsuario);
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Credenciales incorrectas o rol incorrecto.", "Error", JOptionPane.ERROR_MESSAGE);
         }

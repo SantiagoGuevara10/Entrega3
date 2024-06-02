@@ -1,49 +1,60 @@
 package gui;
 
+import payment.PaymentGateway;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import galeria.usuarios.CompradorPropietario;
-import galeria.usuarios.ManejoSesion;
-import galeria.usuarios.Cajero;
-import galeria.usuarios.UsuariosRegistrados;
-import galeria.pieza.Pieza;
-import galeria.inventarios.InventarioGeneral;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PaymentDialog extends JDialog {
-    private JTextField compradorField;
-    private JTextField vendedorField;
-    private JTextField montoField;
-    private JTextField piezaField;
+    private JTextField cardNumberField;
+    private JTextField cardHolderNameField;
+    private JTextField expirationDateField;
+    private JTextField cvvField;
+    private JTextField amountField;
+    private JComboBox<String> gatewayComboBox;
+    private List<PaymentGateway> gateways;
 
     public PaymentDialog(JFrame parentFrame) {
         super(parentFrame, "Procesar Pago", true);
-        setLayout(new GridLayout(5, 2, 10, 10));
+        setLayout(new GridLayout(7, 2, 10, 10));
 
-        add(new JLabel("ID Comprador:"));
-        compradorField = new JTextField(20);
-        add(compradorField);
+        gateways = loadGateways("gateways.config");
 
-        add(new JLabel("ID Vendedor:"));
-        vendedorField = new JTextField(20);
-        add(vendedorField);
+        add(new JLabel("Número de Tarjeta:"));
+        cardNumberField = new JTextField(20);
+        add(cardNumberField);
+
+        add(new JLabel("Nombre del Titular:"));
+        cardHolderNameField = new JTextField(20);
+        add(cardHolderNameField);
+
+        add(new JLabel("Fecha de Expiración (MM/AA):"));
+        expirationDateField = new JTextField(20);
+        add(expirationDateField);
+
+        add(new JLabel("CVV:"));
+        cvvField = new JTextField(20);
+        add(cvvField);
 
         add(new JLabel("Monto:"));
-        montoField = new JTextField(20);
-        add(montoField);
+        amountField = new JTextField(20);
+        add(amountField);
 
-        add(new JLabel("ID Pieza:"));
-        piezaField = new JTextField(20);
-        add(piezaField);
+        add(new JLabel("Pasarela de Pago:"));
+        gatewayComboBox = new JComboBox<>();
+        for (PaymentGateway gateway : gateways) {
+            gatewayComboBox.addItem(gateway.getName());
+        }
+        add(gatewayComboBox);
 
         JButton processButton = new JButton("Procesar");
-        processButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                procesarPago();
-            }
-        });
+        processButton.addActionListener(this::processPayment);
         add(processButton);
 
         JButton cancelButton = new JButton("Cancelar");
@@ -54,41 +65,40 @@ public class PaymentDialog extends JDialog {
         setLocationRelativeTo(parentFrame);
     }
 
-    private void procesarPago() {
-        String compradorId = compradorField.getText();
-        String vendedorId = vendedorField.getText();
-        double monto = Double.parseDouble(montoField.getText());
-        String piezaId = piezaField.getText();
+    private void processPayment(ActionEvent e) {
+        String cardNumber = cardNumberField.getText();
+        String cardHolderName = cardHolderNameField.getText();
+        String expirationDate = expirationDateField.getText();
+        String cvv = cvvField.getText();
+        double amount = Double.parseDouble(amountField.getText());
+        String selectedGateway = (String) gatewayComboBox.getSelectedItem();
 
-        // Obtener instancias adecuadas de CompradorPropietario y Pieza
-        CompradorPropietario comprador = obtenerCompradorPorId(compradorId);
-        CompradorPropietario vendedor = obtenerCompradorPorId(vendedorId);
-        Pieza pieza = obtenerPiezaPorId(piezaId);
-
-        if (comprador == null || vendedor == null || pieza == null) {
-            JOptionPane.showMessageDialog(this, "Datos inválidos", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+        for (PaymentGateway gateway : gateways) {
+            if (gateway.getName().equals(selectedGateway)) {
+                boolean success = gateway.processPayment(cardNumber, cardHolderName, expirationDate, cvv, amount);
+                JOptionPane.showMessageDialog(this, success ? "Pago procesado correctamente" : "Error al procesar el pago", success ? "Éxito" : "Error", success ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE);
+                break;
+            }
         }
-
-        Cajero cajero = (Cajero) ManejoSesion.getEmpleadoActual();
-        cajero.procesarPago(comprador, vendedor, monto, pieza);
-
-        JOptionPane.showMessageDialog(this, "Pago procesado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         dispose();
     }
 
-    private CompradorPropietario obtenerCompradorPorId(String id) {
-        UsuariosRegistrados usuariosRegistrados = new UsuariosRegistrados();
-        for (CompradorPropietario comprador : usuariosRegistrados.getCompradoresEnPrograma()) {
-            if (comprador.getIdUsuario().equals(id)) {
-                return comprador;
+    private List<PaymentGateway> loadGateways(String configFilePath) {
+        List<PaymentGateway> gateways = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(configFilePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                try {
+                    Class<?> clazz = Class.forName(line);
+                    PaymentGateway gateway = (PaymentGateway) clazz.getDeclaredConstructor().newInstance();
+                    gateways.add(gateway);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return null;
-    }
-
-    private Pieza obtenerPiezaPorId(String id) {
-        InventarioGeneral inventario = new InventarioGeneral(); // Aquí debes pasar la instancia adecuada
-        return inventario.getPieza(id);
+        return gateways;
     }
 }
